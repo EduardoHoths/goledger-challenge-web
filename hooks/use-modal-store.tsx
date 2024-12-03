@@ -1,13 +1,12 @@
 import { Artist, Album, Song, Playlist } from "@/service/api";
 import { create } from "zustand";
 
-export type ModalType = "createArtist";
+export type ModalType = "createArtist" | "deleteArtist";
 
 type Asset = Artist | Album | Song | Playlist;
 
 interface ModalData {
-  assetType?: "artist" | "album" | "song" | "playlist";
-  asset?: Asset
+  asset?: Asset;
 }
 
 interface ModalStore {

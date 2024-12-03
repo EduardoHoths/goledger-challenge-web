@@ -14,7 +14,7 @@ export const api = axios.create({
 export interface Artist {
   "@key"?: string;
   name: string;
-  country: string;
+  country?: string;
 }
 
 export interface Album {
@@ -37,10 +37,12 @@ export interface Playlist {
   private: boolean;
 }
 
-export function createAsset(
-  type: "artist" | "album" | "song" | "playlist",
-  asset: Artist | Album | Song | Playlist
-) {
+interface AssetPayload {
+  type: "artist" | "album" | "song" | "playlist";
+  asset: Artist | Album | Song | Playlist;
+}
+
+export function createAsset({ type, asset }: AssetPayload) {
   const payload = {
     asset: [
       {
@@ -53,10 +55,7 @@ export function createAsset(
   return api.post("/invoke/createAsset", payload);
 }
 
-export function updateAsset(
-  type: "artist" | "album" | "song" | "playlist",
-  asset: Artist | Album | Song | Playlist
-) {
+export function updateAsset({ type, asset }: AssetPayload) {
   const payload = {
     update: {
       "@assetType": type,
@@ -64,4 +63,15 @@ export function updateAsset(
     },
   };
   return api.put("/invoke/updateAsset", payload);
+}
+
+export function deleteAsset({ type, asset }: AssetPayload) {
+  const payload = {
+    key: {
+      "@assetType": type,
+      ...asset,
+    },
+  };
+  
+  return api.put("/invoke/deleteAsset", payload);
 }

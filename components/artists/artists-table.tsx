@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
   Table,
@@ -12,12 +12,14 @@ import { Button } from "@/components/ui/button";
 
 import { Pencil, Trash2 } from "lucide-react";
 import { Artist } from "@/service/api";
+import { useModal } from "@/hooks/use-modal-store";
 
 interface ArtistsTableProps {
   artists: Artist[];
 }
 
 const ArtistsTable = ({ artists }: ArtistsTableProps) => {
+  const { onOpen } = useModal();
   return (
     <Table>
       <TableHeader>
@@ -35,7 +37,11 @@ const ArtistsTable = ({ artists }: ArtistsTableProps) => {
               <Button variant="ghost" size="icon">
                 <Pencil className="h-4 w-4" />
               </Button>
-              <Button variant="ghost" size="icon">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => onOpen("deleteArtist", { asset: artist })}
+              >
                 <Trash2 className="h-4 w-4 text-red-400" />
               </Button>
             </TableCell>
