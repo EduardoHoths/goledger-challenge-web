@@ -61,9 +61,12 @@ const CreateArtistModal = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const response = await createAsset("artist", {
-        name: values.name,
-        country: values.country,
+      const response = await createAsset({
+        type: "artist",
+        asset: {
+          name: values.name,
+          country: values.country,
+        },
       });
 
       if (response.status === 200) {
