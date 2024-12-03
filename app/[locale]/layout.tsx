@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.css";
 import { Sidebar } from "@/components/sidebar";
 import { Header } from "@/components/header";
-import { ThemeProvider } from "@/components/theme-provider";
+import { ThemeProvider } from "@/components/providers/theme-provider";
 import { NextIntlClientProvider } from "next-intl";
+import { ModalProvider } from "@/components/providers/modal-provider";
+import "./globals.css";
+import { Toaster } from "@/components/ui/toaster";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -29,6 +31,7 @@ export default async function RootLayout({
       <body className={inter.className}>
         <NextIntlClientProvider locale={locale} messages={messages}>
           <ThemeProvider attribute="class">
+            <ModalProvider />
             <div className="flex h-screen bg-gray-100 dark:bg-gray-900">
               <Sidebar locale={locale} />
               <div className="flex-1 flex flex-col overflow-hidden">
@@ -38,6 +41,7 @@ export default async function RootLayout({
                 </main>
               </div>
             </div>
+            <Toaster />
           </ThemeProvider>
         </NextIntlClientProvider>
       </body>
