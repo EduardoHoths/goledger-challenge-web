@@ -1,0 +1,28 @@
+{
+  "Home": {
+    "title": "Welcome to BlockStream",
+    "cards": {
+      "artists": {
+        "title": "Total Artists",
+        "description": "+20% since last month"
+      },
+      "albums": {
+        "title": "Total Albums",
+        "description": "+15% since last month"
+      },
+      "songs": {
+        "title": "Total Songs",
+        "description": "+25% since last month"
+      },
+      "playlists": {
+        "title": "Total Playlists",
+        "description": "+10% since last month"
+      }
+    }
+  },
+  "theme": {
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  }
+}

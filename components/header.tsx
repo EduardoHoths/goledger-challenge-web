@@ -1,6 +1,7 @@
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { ModeToggle } from "./mode-toggle";
+import LanguageSelector from "./language-selector";
 
 export function Header() {
   return (
@@ -10,6 +11,7 @@ export function Header() {
         <Input type="search" placeholder="Search..." className="ml-2 w-64" />
       </div>
       <div className="flex items-center space-x-4">
+        <LanguageSelector />
         <ModeToggle />
       </div>
     </header>
