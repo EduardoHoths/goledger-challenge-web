@@ -23,7 +23,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { MusicIcon } from "lucide-react";
+import { Mic2 } from "lucide-react";
 import { createAsset } from "@/service/api";
 import { useToast } from "@/hooks/use-toast";
 import { AxiosError } from "axios";
@@ -95,7 +95,7 @@ const CreateArtistModal = () => {
       <DialogContent className="sm:max-w-[425px] dark:bg-[#1c1f26] dark:text-white dark:border-[#2b2f3a]">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-2xl dark:text-white">
-            <MusicIcon className="h-6 w-6" />
+            <Mic2 className="h-6 w-6" />
             Add New Artist
           </DialogTitle>
         </DialogHeader>
