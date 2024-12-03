@@ -12,26 +12,22 @@ export const api = axios.create({
 });
 
 export interface Artist {
-  "@key"?: string;
   name: string;
   country?: string;
 }
 
 export interface Album {
-  "@key"?: string;
   name: string;
   year: number;
   artist: Artist;
 }
 
 export interface Song {
-  "@key"?: string;
   name: string;
   album: Album;
 }
 
 export interface Playlist {
-  "@key"?: string;
   name: string;
   songs: Song[];
   private: boolean;
@@ -72,6 +68,6 @@ export function deleteAsset({ type, asset }: AssetPayload) {
       ...asset,
     },
   };
-  
+
   return api.put("/invoke/deleteAsset", payload);
 }

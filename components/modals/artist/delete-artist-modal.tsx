@@ -14,14 +14,14 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { Trash2, AlertTriangle } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { deleteAsset } from "@/service/api";
+import { Artist, deleteAsset } from "@/service/api";
 import { handleApiError } from "@/service/handle-api-error";
 import { AxiosError } from "axios";
 
 const DeleteArtistModal = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { isOpen, onClose, type, data } = useModal();
-  const { asset } = data;
+  const { asset } = data as { asset: Artist };
   const { toast } = useToast();
 
   const isModalOpen = isOpen && type === "deleteArtist";
@@ -33,7 +33,7 @@ const DeleteArtistModal = () => {
       const response = await deleteAsset({
         type: "artist",
         asset: {
-          name: asset!.name,
+          name: asset.name,
         },
       });
 

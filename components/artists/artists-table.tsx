@@ -30,11 +30,15 @@ const ArtistsTable = ({ artists }: ArtistsTableProps) => {
       </TableHeader>
       <TableBody>
         {artists.map((artist) => (
-          <TableRow key={artist["@key"]}>
+          <TableRow key={artist.name}>
             <TableCell>{artist.name}</TableCell>
 
             <TableCell>
-              <Button variant="ghost" size="icon">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => onOpen("editArtist", { asset: artist })}
+              >
                 <Pencil className="h-4 w-4" />
               </Button>
               <Button
