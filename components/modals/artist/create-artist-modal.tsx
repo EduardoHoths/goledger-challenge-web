@@ -28,6 +28,7 @@ import { createAsset } from "@/service/api";
 import { useToast } from "@/hooks/use-toast";
 import { AxiosError } from "axios";
 import { handleApiError } from "@/service/handle-api-error";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const formSchema = z.object({
   name: z.string().min(1, {
@@ -52,30 +53,24 @@ const CreateArtistModal = () => {
     },
   });
 
-  const isLoading = form.formState.isSubmitting;
-
   const handleClose = () => {
     form.reset();
     onClose();
   };
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    try {
-      const response = await createAsset({
-        type: "artist",
-        asset: {
-          name: values.name,
-          country: values.country,
-        },
-      });
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: createAsset,
 
-      if (response.status === 200) {
-        toast({
-          title: "Artist created successfully",
-          variant: "success",
-        });
-      }
-    } catch (error) {
+    onSuccess: () => {
+      handleClose();
+      queryClient.invalidateQueries({ queryKey: ["artists"] });
+      toast({
+        title: "Artist created successfully",
+        variant: "success",
+      });
+    },
+    onError: (error) => {
       if (error instanceof AxiosError) {
         const message = handleApiError(error);
         toast({
@@ -84,13 +79,24 @@ const CreateArtistModal = () => {
         });
       } else {
         console.error(error);
-
         toast({
           title: "Something went wrong",
           variant: "destructive",
         });
       }
-    }
+    },
+  });
+
+  const isLoading = mutation.isPending
+
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    mutation.mutate({
+      type: "artist",
+      asset: {
+        name: values.name,
+        country: values.country,
+      },
+    });
   };
 
   return (

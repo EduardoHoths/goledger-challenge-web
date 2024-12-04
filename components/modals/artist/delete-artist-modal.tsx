@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -17,34 +16,29 @@ import { cn } from "@/lib/utils";
 import { Artist, deleteAsset } from "@/service/api";
 import { handleApiError } from "@/service/handle-api-error";
 import { AxiosError } from "axios";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const DeleteArtistModal = () => {
-  const [isLoading, setIsLoading] = useState(false);
   const { isOpen, onClose, type, data } = useModal();
   const { asset } = data as { asset: Artist };
   const { toast } = useToast();
 
   const isModalOpen = isOpen && type === "deleteArtist";
 
-  const handleDelete = async () => {
-    setIsLoading(true);
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: deleteAsset,
 
-    try {
-      const response = await deleteAsset({
-        type: "artist",
-        asset: {
-          name: asset.name,
-        },
+    onSuccess: () => {
+      onClose();
+      queryClient.invalidateQueries({ queryKey: ["artists"] });
+      toast({
+        title: "Artist Deleted",
+        description: `${asset?.name} has been permanently deleted.`,
+        variant: "destructive",
       });
-
-      if (response.status === 200) {
-        toast({
-          title: "Artist Deleted",
-          description: `${asset?.name} has been permanently deleted.`,
-          variant: "destructive",
-        });
-      }
-    } catch (error) {
+    },
+    onError: (error) => {
       if (error instanceof AxiosError) {
         const message = handleApiError(error);
         toast({
@@ -53,16 +47,23 @@ const DeleteArtistModal = () => {
         });
       } else {
         console.error(error);
-
         toast({
           title: "Something went wrong",
           variant: "destructive",
         });
       }
-    } finally {
-      setIsLoading(false);
-      onClose();
-    }
+    },
+  });
+
+  const isLoading = mutation.isPending;
+
+  const handleDelete = async () => {
+    mutation.mutate({
+      type: "artist",
+      asset: {
+        name: asset.name,
+      },
+    });
   };
 
   return (

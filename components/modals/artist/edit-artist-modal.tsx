@@ -29,6 +29,7 @@ import { useToast } from "@/hooks/use-toast";
 import { AxiosError } from "axios";
 import { handleApiError } from "@/service/handle-api-error";
 import { useEffect } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const formSchema = z.object({
   name: z.string().min(1, {
@@ -61,30 +62,24 @@ const EditArtistModal = () => {
     }
   }, [form, asset]);
 
-  const isLoading = form.formState.isSubmitting;
-
   const handleClose = () => {
     form.reset();
     onClose();
   };
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    try {
-      const response = await updateAsset({
-        type: "artist",
-        asset: {
-          name: values.name,
-          country: values.country,
-        },
-      });
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: updateAsset,
 
-      if (response.status === 200) {
-        toast({
-          title: "Artist updated successfully",
-          variant: "success",
-        });
-      }
-    } catch (error) {
+    onSuccess: () => {
+      handleClose();
+      queryClient.invalidateQueries({ queryKey: ["artists"] });
+      toast({
+        title: "Artist updated successfully",
+        variant: "success",
+      });
+    },
+    onError: (error) => {
       if (error instanceof AxiosError) {
         const message = handleApiError(error);
         toast({
@@ -93,13 +88,24 @@ const EditArtistModal = () => {
         });
       } else {
         console.error(error);
-
         toast({
           title: "Something went wrong",
           variant: "destructive",
         });
       }
-    }
+    },
+  });
+
+  const isLoading = mutation.isPending;
+
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    mutation.mutate({
+      type: "artist",
+      asset: {
+        name: values.name,
+        country: values.country,
+      },
+    });
   };
 
   return (
@@ -123,7 +129,7 @@ const EditArtistModal = () => {
                     <Input
                       placeholder="Enter artist name"
                       {...field}
-                      disabled={isLoading}
+                      disabled={true}
                       className="w-full dark:bg-[#2b2f3a] dark:border-[#3f4451] dark:text-white dark:placeholder-gray-400"
                     />
                   </FormControl>
