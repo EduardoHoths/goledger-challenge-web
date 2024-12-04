@@ -20,6 +20,58 @@
       }
     }
   },
+  "artists": {
+    "title": "artistas",
+    "add-artist-button": "Adicionar artista",
+    "artist-table": {
+      "input-search": "Buscar artistas...",
+      "table-header": {
+        "name": "nome",
+        "actions": "ações"
+      }
+    },
+    "modals": {
+      "create": {
+        "title": "Criar artista",
+        "name": "Nome",
+        "name-placeholder": "Digite o nome do artista",
+        "name-error": "Nome é obrigatório",
+        "country": "País",
+        "country-placeholder": "Digite o país do artista",
+        "country-error": "País é obrigatório",
+        "submit": "Adicionar artista",
+        "submiting": "Adicionando...",
+        "success": "Artista criado com sucesso"
+      },
+      "edit": {
+        "title": "Editar artista",
+        "name": "Nome",
+        "name-placeholder": "Digite o nome do artista",
+        "name-error": "Nome é obrigatório",
+        "country": "País",
+        "country-placeholder": "Digite o país do artista",
+        "country-error": "País é obrigatório",
+        "submit": "Editar artista",
+        "submiting": "Editando...",
+        "success": "Artista atualizado com sucesso"
+      },
+      "delete": {
+        "title": "Excluir Artista",
+        "description": "Tem certeza que deseja excluir",
+        "warning": "Esta ação não pode ser desfeita.",
+        "submit": "Excluir artista",
+        "submiting": "Excluindo...",
+        "success": "Artista deletado com sucesso"
+      },
+      "cancel": "Cancelar"
+    }
+  },
+  "api-error": {
+    "400": "Requisição inválida com detalhes de erro ausentes.",
+    "409": "Recurso já existe.",
+    "500": "Ocorreu um erro interno. Por favor, tente novamente mais tarde.",
+    "default": "Ocorreu um erro inesperado."
+  },
   "theme": {
     "light": "Claro",
     "dark": "Escuro",

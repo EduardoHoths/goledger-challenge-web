@@ -30,6 +30,7 @@ import { AxiosError } from "axios";
 import { handleApiError } from "@/service/handle-api-error";
 import { useEffect } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 
 const formSchema = z.object({
   name: z.string().min(1, {
@@ -41,6 +42,8 @@ const formSchema = z.object({
 });
 
 const EditArtistModal = () => {
+  const translation = useTranslations("artists");
+  const errorTranslation = useTranslations("api-error");
   const { isOpen, onClose, type, data } = useModal();
   const { asset } = data as { asset: Required<Artist> };
   const { toast } = useToast();
@@ -75,13 +78,13 @@ const EditArtistModal = () => {
       handleClose();
       queryClient.invalidateQueries({ queryKey: ["artists"] });
       toast({
-        title: "Artist updated successfully",
+        title: translation("modals.edit.success"),
         variant: "success",
       });
     },
     onError: (error) => {
       if (error instanceof AxiosError) {
-        const message = handleApiError(error);
+        const message = handleApiError(error, errorTranslation);
         toast({
           title: message,
           variant: "destructive",
@@ -114,7 +117,7 @@ const EditArtistModal = () => {
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-2xl dark:text-white">
             <Mic2 className="h-6 w-6" />
-            Edit Artist
+            {translation("modals.edit.title")}
           </DialogTitle>
         </DialogHeader>
         <Form {...form}>
@@ -124,10 +127,12 @@ const EditArtistModal = () => {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="dark:text-gray-300">Name</FormLabel>
+                  <FormLabel className="dark:text-gray-300">
+                    {translation("modals.edit.name")}
+                  </FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="Enter artist name"
+                      placeholder={translation("modals.edit.name-placeholder")}
                       {...field}
                       disabled={true}
                       className="w-full dark:bg-[#2b2f3a] dark:border-[#3f4451] dark:text-white dark:placeholder-gray-400"
@@ -143,10 +148,14 @@ const EditArtistModal = () => {
               name="country"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="dark:text-gray-300">Country</FormLabel>
+                  <FormLabel className="dark:text-gray-300">
+                    {translation("modals.edit.country")}
+                  </FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="Enter artist's country"
+                      placeholder={translation(
+                        "modals.edit.country-placeholder"
+                      )}
                       {...field}
                       disabled={isLoading}
                       className="w-full dark:bg-[#2b2f3a] dark:border-[#3f4451] dark:text-white dark:placeholder-gray-400"
@@ -165,14 +174,16 @@ const EditArtistModal = () => {
                 disabled={isLoading}
                 className="dark:bg-[#2b2f3a] dark:text-white dark:border-[#3f4451] dark:hover:bg-[#3f4451]"
               >
-                Cancel
+                {translation("modals.cancel")}
               </Button>
               <Button
                 type="submit"
                 disabled={isLoading}
                 className="dark:bg-[#4f46e5] dark:text-white dark:hover:bg-[#4338ca]"
               >
-                {isLoading ? "Editing..." : "Edit Artist"}
+                {isLoading
+                  ? translation("modals.edit.submiting")
+                  : translation("modals.edit.submit")}
               </Button>
             </DialogFooter>
           </form>

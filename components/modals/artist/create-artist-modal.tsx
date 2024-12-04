@@ -29,24 +29,31 @@ import { useToast } from "@/hooks/use-toast";
 import { AxiosError } from "axios";
 import { handleApiError } from "@/service/handle-api-error";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 
-const formSchema = z.object({
-  name: z.string().min(1, {
-    message: "Name is required.",
-  }),
-  country: z.string().min(1, {
-    message: "Country is required.",
-  }),
-});
+/* eslint-disable @typescript-eslint/no-explicit-any */
+const formSchema = (translation: any) =>
+  z.object({
+    name: z.string().min(1, {
+      message: translation("modals.create.name-error"),
+    }),
+    country: z.string().min(1, {
+      message: translation("modals.create.country-error"),
+    }),
+  });
 
 const CreateArtistModal = () => {
+  const translation = useTranslations("artists");
+  const errorTranslation = useTranslations("api-error")
   const { isOpen, onClose, type } = useModal();
   const { toast } = useToast();
 
   const isModalOpen = isOpen && type === "createArtist";
 
+  const schema = formSchema(translation);
+
   const form = useForm({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(schema),
     defaultValues: {
       name: "",
       country: "",
@@ -66,13 +73,13 @@ const CreateArtistModal = () => {
       handleClose();
       queryClient.invalidateQueries({ queryKey: ["artists"] });
       toast({
-        title: "Artist created successfully",
+        title: translation("modals.create.success"),
         variant: "success",
       });
     },
     onError: (error) => {
       if (error instanceof AxiosError) {
-        const message = handleApiError(error);
+        const message = handleApiError(error, errorTranslation);
         toast({
           title: message,
           variant: "destructive",
@@ -87,9 +94,9 @@ const CreateArtistModal = () => {
     },
   });
 
-  const isLoading = mutation.isPending
+  const isLoading = mutation.isPending;
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: z.infer<typeof schema>) => {
     mutation.mutate({
       type: "artist",
       asset: {
@@ -105,7 +112,7 @@ const CreateArtistModal = () => {
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-2xl dark:text-white">
             <Mic2 className="h-6 w-6" />
-            Add New Artist
+            {translation("modals.create.title")}
           </DialogTitle>
         </DialogHeader>
         <Form {...form}>
@@ -115,10 +122,14 @@ const CreateArtistModal = () => {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="dark:text-gray-300">Name</FormLabel>
+                  <FormLabel className="dark:text-gray-300">
+                    {translation("modals.create.name")}
+                  </FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="Enter artist name"
+                      placeholder={translation(
+                        "modals.create.name-placeholder"
+                      )}
                       {...field}
                       disabled={isLoading}
                       className="w-full dark:bg-[#2b2f3a] dark:border-[#3f4451] dark:text-white dark:placeholder-gray-400"
@@ -134,10 +145,14 @@ const CreateArtistModal = () => {
               name="country"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="dark:text-gray-300">Country</FormLabel>
+                  <FormLabel className="dark:text-gray-300">
+                    {translation("modals.create.country")}
+                  </FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="Enter artist's country"
+                      placeholder={translation(
+                        "modals.create.country-placeholder"
+                      )}
                       {...field}
                       disabled={isLoading}
                       className="w-full dark:bg-[#2b2f3a] dark:border-[#3f4451] dark:text-white dark:placeholder-gray-400"
@@ -156,14 +171,16 @@ const CreateArtistModal = () => {
                 disabled={isLoading}
                 className="dark:bg-[#2b2f3a] dark:text-white dark:border-[#3f4451] dark:hover:bg-[#3f4451]"
               >
-                Cancel
+                {translation("modals.cancel")}
               </Button>
               <Button
                 type="submit"
                 disabled={isLoading}
                 className="dark:bg-[#4f46e5] dark:text-white dark:hover:bg-[#4338ca]"
               >
-                {isLoading ? "Adding..." : "Add Artist"}
+                {isLoading
+                  ? translation("modals.create.submiting")
+                  : translation("modals.create.submit")}
               </Button>
             </DialogFooter>
           </form>

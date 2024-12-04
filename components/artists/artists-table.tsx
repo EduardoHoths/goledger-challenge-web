@@ -18,6 +18,7 @@ import { useModal } from "@/hooks/use-modal-store";
 
 import { Artist, searchAsset } from "@/service/api";
 import { useQuery } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 
 async function getArtists(query: string = "") {
   try {
@@ -53,11 +54,13 @@ const ArtistsTable = () => {
     setSearchQuery(e.target.value);
   };
 
+  const translation = useTranslations("artists");
+
   return (
     <div className="space-y-4">
       <Input
         type="text"
-        placeholder="Search artists..."
+        placeholder={translation("artist-table.input-search")}
         value={searchQuery}
         onChange={handleSearchChange}
         className="max-w-sm"
@@ -65,8 +68,12 @@ const ArtistsTable = () => {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Name</TableHead>
-            <TableHead>Actions</TableHead>
+            <TableHead className="capitalize">
+              {translation("artist-table.table-header.name")}
+            </TableHead>
+            <TableHead className="capitalize">
+              {translation("artist-table.table-header.actions")}
+            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>

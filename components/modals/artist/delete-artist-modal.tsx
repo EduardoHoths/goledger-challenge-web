@@ -17,8 +17,11 @@ import { Artist, deleteAsset } from "@/service/api";
 import { handleApiError } from "@/service/handle-api-error";
 import { AxiosError } from "axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 
 const DeleteArtistModal = () => {
+  const translation = useTranslations("artists");
+  const errorTranslation = useTranslations("api-error");
   const { isOpen, onClose, type, data } = useModal();
   const { asset } = data as { asset: Artist };
   const { toast } = useToast();
@@ -33,14 +36,13 @@ const DeleteArtistModal = () => {
       onClose();
       queryClient.invalidateQueries({ queryKey: ["artists"] });
       toast({
-        title: "Artist Deleted",
-        description: `${asset?.name} has been permanently deleted.`,
+        title: translation("modals.delete.success"),
         variant: "destructive",
       });
     },
     onError: (error) => {
       if (error instanceof AxiosError) {
-        const message = handleApiError(error);
+        const message = handleApiError(error, errorTranslation);
         toast({
           title: message,
           variant: "destructive",
@@ -72,16 +74,16 @@ const DeleteArtistModal = () => {
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-2xl dark:text-white">
             <Trash2 className="h-6 w-6 text-red-500" />
-            Delete Artist
+            {translation("modals.delete.title")}
           </DialogTitle>
         </DialogHeader>
         <div className="flex flex-col items-center py-6">
           <AlertTriangle className="h-16 w-16 text-yellow-500 mb-4" />
           <DialogDescription className="text-center">
-            Are you sure you want to delete <br />
+            {translation("modals.delete.description")} <br />
             <span className="font-semibold text-lg">{asset?.name}</span>?
             <span className="mt-4 text-sm text-gray-500 dark:text-gray-400 block">
-              This action cannot be undone.
+              {translation("modals.delete.warning")}
             </span>
           </DialogDescription>
         </div>
@@ -92,7 +94,7 @@ const DeleteArtistModal = () => {
             variant="outline"
             className="w-full sm:w-auto"
           >
-            Cancel
+            {translation("modals.cancel")}
           </Button>
           <Button
             disabled={isLoading}
@@ -103,7 +105,9 @@ const DeleteArtistModal = () => {
               isLoading && "opacity-50 cursor-not-allowed"
             )}
           >
-            {isLoading ? "Deleting..." : "Delete Artist"}
+            {isLoading
+              ? translation("modals.delete.submiting")
+              : translation("modals.delete.submit")}
           </Button>
         </DialogFooter>
       </DialogContent>

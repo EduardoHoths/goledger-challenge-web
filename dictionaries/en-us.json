@@ -20,6 +20,59 @@
       }
     }
   },
+  "artists": {
+    "title": "artists",
+    "add-artist-button": "Add artist",
+    "artist-table": {
+      "input-search": "Search artists...",
+      "table-header": {
+        "name": "name",
+        "actions": "actions"
+      }
+    },
+    "modals": {
+      "create": {
+        "title": "Create artist",
+        "name": "Name",
+        "name-placeholder": "Enter artist name",
+        "name-error": "Name is required",
+        "country": "country",
+        "country-placeholder": "Enter artist country",
+        "country-error": "Country is required",
+        "submit": "Add artist",
+        "submiting": "Adding...",
+        "success": "Artist created successfully",
+        "error": "Error creating artist"
+      },
+      "edit": {
+        "title": "Edit artist",
+        "name": "Name",
+        "name-placeholder": "Enter artist name",
+        "name-error": "Name is required",
+        "country": "country",
+        "country-placeholder": "Enter artist country",
+        "country-error": "Country is required",
+        "submit": "Edit artist",
+        "submiting": "Editing...",
+        "success": "Artist updated successfully"
+      },
+      "delete": {
+        "title": "Delete Artist",
+        "description": "Are you sure you want to delete",
+        "warning": "This action cannot be undone.",
+        "submit": "Delete artist",
+        "submiting": "Deleting...",
+        "success": "Artist deleted successfully"
+      },
+      "cancel": "Cancel"
+    }
+  },
+  "api-error": {
+    "400": "Invalid request with missing error details.",
+    "409": "Resource already exists.",
+    "500": "An internal error occurred. Please try again later.",
+    "default": "An unexpected error occurred."
+  },
   "theme": {
     "light": "Light",
     "dark": "Dark",
