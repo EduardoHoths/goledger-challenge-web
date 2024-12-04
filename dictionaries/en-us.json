@@ -67,6 +67,13 @@
       "cancel": "Cancel"
     }
   },
+  "sidebar":{
+    "home": "Home",
+    "artists": "Artists",
+    "albums": "Albums",
+    "songs": "Songs",
+    "playlists": "Playlists"
+  },
   "api-error": {
     "400": "Invalid request with missing error details.",
     "409": "Resource already exists.",

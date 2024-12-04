@@ -66,6 +66,13 @@
       "cancel": "Cancelar"
     }
   },
+  "sidebar": {
+    "home": "Início",
+    "artists": "Artistas",
+    "albums": "Álbuns",
+    "songs": "Músicas",
+    "playlists": "Playlists"
+  },
   "api-error": {
     "400": "Requisição inválida com detalhes de erro ausentes.",
     "409": "Recurso já existe.",
