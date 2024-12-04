@@ -12,6 +12,7 @@ export const api = axios.create({
 });
 
 export interface Artist {
+  "@key"?: string;
   name: string;
   country?: string;
 }
@@ -33,9 +34,31 @@ export interface Playlist {
   private: boolean;
 }
 
+type AssetType = "artist" | "album" | "song" | "playlist";
+
 interface AssetPayload {
-  type: "artist" | "album" | "song" | "playlist";
+  type: AssetType;
   asset: Artist | Album | Song | Playlist;
+  query?: string;
+}
+
+interface SearchAssetProps {
+  selector: {
+    "@assetType": AssetType;
+    name?: string;
+  };
+}
+
+export function searchAsset({ selector }: SearchAssetProps) {
+  const payload = {
+    query: {
+      selector: {
+        ...selector,
+      },
+    },
+  };
+
+  return api.post("/query/search", payload);
 }
 
 export function createAsset({ type, asset }: AssetPayload) {

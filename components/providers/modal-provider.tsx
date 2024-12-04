@@ -5,6 +5,7 @@ import CreateArtistModal from "../modals/artist/create-artist-modal";
 import DeleteArtistModal from "../modals/artist/delete-artist-modal";
 import EditArtistModal from "../modals/artist/edit-artist-modal";
 
+
 export const ModalProvider = () => {
   const [isMounted, setIsMounted] = useState(false);
 
@@ -21,6 +22,7 @@ export const ModalProvider = () => {
       <CreateArtistModal />
       <DeleteArtistModal />
       <EditArtistModal />
+
     </>
   );
 };
