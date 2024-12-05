@@ -24,46 +24,45 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Mic2 } from "lucide-react";
-import { Artist, updateAsset } from "@/service/api";
+import { createAsset } from "@/service/api";
 import { useToast } from "@/hooks/use-toast";
 import { AxiosError } from "axios";
 import { handleApiError } from "@/service/handle-api-error";
-import { useEffect } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 
-const formSchema = z.object({
-  name: z.string().min(1, {
-    message: "Name is required.",
-  }),
-  country: z.string().min(1, {
-    message: "Country is required.",
-  }),
-});
-
-const EditArtistModal = () => {
-  const translation = useTranslations("artists");
-  const errorTranslation = useTranslations("api-error");
-  const { isOpen, onClose, type, data } = useModal();
-  const { asset } = data as { asset: Required<Artist> };
-  const { toast } = useToast();
-
-  const isModalOpen = isOpen && type === "edit-artist";
-
-  const form = useForm({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: "",
-      country: "",
-    },
+/* eslint-disable @typescript-eslint/no-explicit-any */
+const formSchema = (translation: any) =>
+  z.object({
+    name: z.string().min(1, {
+      message: translation("modals.create.name-error"),
+    }),
+    year: z.string().min(1, {
+      message: translation("modals.create.year-error"),
+    }),
+    artist: z.string().min(1, {
+      message: translation("modals.create.artist-name-error"),
+    }),
   });
 
-  useEffect(() => {
-    if (asset) {
-      form.setValue("name", asset.name);
-      form.setValue("country", asset.country);
-    }
-  }, [form, asset]);
+const CreateAlbumModal = () => {
+  const translation = useTranslations("albums");
+  const errorTranslation = useTranslations("api-error");
+  const { isOpen, onClose, type } = useModal();
+  const { toast } = useToast();
+
+  const isModalOpen = isOpen && type === "create-album";
+
+  const schema = formSchema(translation);
+
+  const form = useForm({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      name: "",
+      year: "",
+      artist: "",
+    },
+  });
 
   const handleClose = () => {
     form.reset();
@@ -72,13 +71,13 @@ const EditArtistModal = () => {
 
   const queryClient = useQueryClient();
   const mutation = useMutation({
-    mutationFn: updateAsset,
+    mutationFn: createAsset,
 
     onSuccess: () => {
       handleClose();
       queryClient.invalidateQueries({ queryKey: ["artists"] });
       toast({
-        title: translation("modals.edit.success"),
+        title: translation("modals.create.success"),
         variant: "success",
       });
     },
@@ -101,12 +100,15 @@ const EditArtistModal = () => {
 
   const isLoading = mutation.isPending;
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: z.infer<typeof schema>) => {
     mutation.mutate({
-      type: "artist",
+      type: "album",
       asset: {
         name: values.name,
-        country: values.country,
+        year: Number(values.year),
+        artist: {
+          name: values.artist,
+        },
       },
     });
   };
@@ -117,7 +119,7 @@ const EditArtistModal = () => {
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-2xl dark:text-white">
             <Mic2 className="h-6 w-6" />
-            {translation("modals.edit.title")}
+            {translation("modals.create.title")}
           </DialogTitle>
         </DialogHeader>
         <Form {...form}>
@@ -128,13 +130,15 @@ const EditArtistModal = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="dark:text-gray-300">
-                    {translation("modals.edit.name")}
+                    {translation("modals.create.name")}
                   </FormLabel>
                   <FormControl>
                     <Input
-                      placeholder={translation("modals.edit.name-placeholder")}
+                      placeholder={translation(
+                        "modals.create.name-placeholder"
+                      )}
                       {...field}
-                      disabled={true}
+                      disabled={isLoading}
                       className="w-full dark:bg-[#2b2f3a] dark:border-[#3f4451] dark:text-white dark:placeholder-gray-400"
                     />
                   </FormControl>
@@ -145,16 +149,39 @@ const EditArtistModal = () => {
 
             <FormField
               control={form.control}
-              name="country"
+              name="year"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="dark:text-gray-300">
-                    {translation("modals.edit.country")}
+                    {translation("modals.create.year")}
                   </FormLabel>
                   <FormControl>
                     <Input
                       placeholder={translation(
-                        "modals.edit.country-placeholder"
+                        "modals.create.year-placeholder"
+                      )}
+                      {...field}
+                      disabled={isLoading}
+                      type="number"
+                      className="w-full dark:bg-[#2b2f3a] dark:border-[#3f4451] dark:text-white dark:placeholder-gray-400"
+                    />
+                  </FormControl>
+                  <FormMessage className="text-red-400" />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="artist"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="dark:text-gray-300">
+                    {translation("modals.create.artist-name")}
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder={translation(
+                        "modals.create.artist-name-placeholder"
                       )}
                       {...field}
                       disabled={isLoading}
@@ -182,8 +209,8 @@ const EditArtistModal = () => {
                 className="dark:bg-[#4f46e5] dark:text-white dark:hover:bg-[#4338ca]"
               >
                 {isLoading
-                  ? translation("modals.edit.submiting")
-                  : translation("modals.edit.submit")}
+                  ? translation("modals.create.submiting")
+                  : translation("modals.create.submit")}
               </Button>
             </DialogFooter>
           </form>
@@ -193,4 +220,4 @@ const EditArtistModal = () => {
   );
 };
 
-export default EditArtistModal;
+export default CreateAlbumModal;

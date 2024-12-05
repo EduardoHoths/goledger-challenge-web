@@ -22,8 +22,8 @@
   },
   "artists": {
     "title": "artists",
-    "add-artist-button": "Add artist",
-    "artist-table": {
+    "add-button": "Add artist",
+    "table": {
       "input-search": "Search artists...",
       "table-header": {
         "name": "name",
@@ -67,7 +67,56 @@
       "cancel": "Cancel"
     }
   },
-  "sidebar":{
+  "albums": {
+    "title": "albums",
+    "add-button": "Add album",
+    "table": {
+      "input-search": "Search albums...",
+      "table-header": {
+        "name": "name",
+        "year": "year",
+        "actions": "actions"
+      }
+    },
+    "modals": {
+      "create": {
+        "title": "Create album",
+        "name": "Name",
+        "name-placeholder": "Enter album name",
+        "name-error": "Name is required",
+        "year": "Year",
+        "year-placeholder": "Enter album year",
+        "year-error": "Year is required",
+        "artist-name": "Artist name",
+        "artist-name-placeholder": "Enter artist name",
+        "artist-name-error": "Artist name is required",
+        "submit": "Add album",
+        "submiting": "Adding...",
+        "success": "Album created successfully"
+      },
+      "edit": {
+        "title": "Edit album",
+        "name": "Name",
+        "name-placeholder": "Enter album name",
+        "name-error": "Name is required",
+        "country": "Country",
+        "country-placeholder": "Enter album country",
+        "country-error": "Country is required",
+        "submit": "Edit album",
+        "submiting": "Editing...",
+        "success": "Album updated successfully"
+      },
+      "delete": {
+        "title": "Delete Album",
+        "description": "Are you sure you want to delete",
+        "warning": "This action cannot be undone.",
+        "submit": "Delete album",
+        "submiting": "Deleting...",
+        "success": "Album deleted successfully"
+      },
+      "cancel": "Cancel"
+    }
+  },  "sidebar":{
     "home": "Home",
     "artists": "Artists",
     "albums": "Albums",

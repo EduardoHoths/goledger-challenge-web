@@ -22,8 +22,8 @@
   },
   "artists": {
     "title": "artistas",
-    "add-artist-button": "Adicionar artista",
-    "artist-table": {
+    "add-button": "Adicionar artista",
+    "table": {
       "input-search": "Buscar artistas...",
       "table-header": {
         "name": "nome",
@@ -62,6 +62,55 @@
         "submit": "Excluir artista",
         "submiting": "Excluindo...",
         "success": "Artista deletado com sucesso"
+      },
+      "cancel": "Cancelar"
+    }
+  },
+  "albums": {
+    "title": "álbuns",
+    "add-button": "Adicionar álbum",
+    "table": {
+      "input-search": "Buscar álbuns...",
+      "table-header": {
+        "name": "nome",
+        "year": "ano",
+        "actions": "ações"
+      }
+    },
+    "modals": {
+      "create": {
+        "title": "Criar álbum",
+        "name": "Nome",
+        "name-placeholder": "Digite o nome do álbum",
+        "name-error": "Nome é obrigatório",
+        "year": "Ano",
+        "year-placeholder": "Digite o ano do álbum",
+        "year-error": "Ano é obrigatório",
+        "artist-name": "Nome do artista",
+        "artist-name-placeholder": "Digite o nome do artista",
+        "artist-name-error": "Nome do artista é obrigatório",
+        "submit": "Adicionar álbum",
+        "submiting": "Adicionando...",
+        "success": "Álbum criado com sucesso"
+      },      "edit": {
+        "title": "Editar álbum",
+        "name": "Nome",
+        "name-placeholder": "Digite o nome do álbum",
+        "name-error": "Nome é obrigatório",
+        "country": "País",
+        "country-placeholder": "Digite o país do álbum",
+        "country-error": "País é obrigatório",
+        "submit": "Editar álbum",
+        "submiting": "Editando...",
+        "success": "Álbum atualizado com sucesso"
+      },
+      "delete": {
+        "title": "Excluir Álbum",
+        "description": "Tem certeza que deseja excluir",
+        "warning": "Esta ação não pode ser desfeita.",
+        "submit": "Excluir álbum",
+        "submiting": "Excluindo...",
+        "success": "Álbum deletado com sucesso"
       },
       "cancel": "Cancelar"
     }

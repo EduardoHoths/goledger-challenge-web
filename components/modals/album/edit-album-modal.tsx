@@ -24,7 +24,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Mic2 } from "lucide-react";
-import { Artist, updateAsset } from "@/service/api";
+import { Album, updateAsset } from "@/service/api";
 import { useToast } from "@/hooks/use-toast";
 import { AxiosError } from "axios";
 import { handleApiError } from "@/service/handle-api-error";
@@ -32,36 +32,40 @@ import { useEffect } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 
-const formSchema = z.object({
-  name: z.string().min(1, {
-    message: "Name is required.",
-  }),
-  country: z.string().min(1, {
-    message: "Country is required.",
-  }),
-});
+/* eslint-disable @typescript-eslint/no-explicit-any */
+const formSchema = (translation: any) =>
+  z.object({
+    name: z.string().min(1, {
+      message: translation("modals.create.name-error"),
+    }),
+    year: z.string().min(1, {
+      message: translation("modals.create.year-error"),
+    }),
+  });
 
-const EditArtistModal = () => {
-  const translation = useTranslations("artists");
+const EditAlbumModal = () => {
+  const translation = useTranslations("albums");
   const errorTranslation = useTranslations("api-error");
   const { isOpen, onClose, type, data } = useModal();
-  const { asset } = data as { asset: Required<Artist> };
+  const { asset } = data as { asset: Required<Album> };
   const { toast } = useToast();
 
-  const isModalOpen = isOpen && type === "edit-artist";
+  const isModalOpen = isOpen && type === "edit-album";
+
+  const schema = formSchema(translation);
 
   const form = useForm({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(schema),
     defaultValues: {
       name: "",
-      country: "",
+      year: "",
     },
   });
 
   useEffect(() => {
     if (asset) {
       form.setValue("name", asset.name);
-      form.setValue("country", asset.country);
+      form.setValue("year", asset.year.toString());
     }
   }, [form, asset]);
 
@@ -73,10 +77,9 @@ const EditArtistModal = () => {
   const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: updateAsset,
-
     onSuccess: () => {
       handleClose();
-      queryClient.invalidateQueries({ queryKey: ["artists"] });
+      queryClient.invalidateQueries({ queryKey: ["albums"] });
       toast({
         title: translation("modals.edit.success"),
         variant: "success",
@@ -101,12 +104,15 @@ const EditArtistModal = () => {
 
   const isLoading = mutation.isPending;
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: z.infer<typeof schema>) => {
     mutation.mutate({
-      type: "artist",
+      type: "album",
       asset: {
         name: values.name,
-        country: values.country,
+        year: Number(values.year),
+        artist: {
+          "@key": asset.artist["@key"],
+        }
       },
     });
   };
@@ -145,7 +151,7 @@ const EditArtistModal = () => {
 
             <FormField
               control={form.control}
-              name="country"
+              name="year"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="dark:text-gray-300">
@@ -158,6 +164,7 @@ const EditArtistModal = () => {
                       )}
                       {...field}
                       disabled={isLoading}
+                      type="number"
                       className="w-full dark:bg-[#2b2f3a] dark:border-[#3f4451] dark:text-white dark:placeholder-gray-400"
                     />
                   </FormControl>
@@ -193,4 +200,4 @@ const EditArtistModal = () => {
   );
 };
 
-export default EditArtistModal;
+export default EditAlbumModal;

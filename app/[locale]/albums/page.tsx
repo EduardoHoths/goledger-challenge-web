@@ -1,12 +1,13 @@
-"use client"
+"use client";
 
 import AddAssetButton from "@/components/add-asset-button";
 import AssetTable from "@/components/asset-table";
+
 import { useTranslations } from "next-intl";
 
 export default function ArtistsPage() {
-  const translation = useTranslations("artists");
-  
+  const translation = useTranslations("albums");
+
   return (
     <div className="container mx-auto p-6">
       <div className="flex justify-between items-center mb-6">
@@ -14,12 +15,16 @@ export default function ArtistsPage() {
           {translation("title")}
         </h1>
 
-        <AddAssetButton translation={translation("add-button")} assetType="artist" />
+        <AddAssetButton
+          translation={translation("add-button")}
+          assetType="album"
+        />
       </div>
       <AssetTable
-        assetType="artist"
-        queryKey="artists"
         translation={translation}
+        assetType="album"
+        queryKey="albums"
+        table="album"
       />
     </div>
   );

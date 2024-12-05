@@ -48,7 +48,7 @@ const CreateArtistModal = () => {
   const { isOpen, onClose, type } = useModal();
   const { toast } = useToast();
 
-  const isModalOpen = isOpen && type === "createArtist";
+  const isModalOpen = isOpen && type === "create-artist";
 
   const schema = formSchema(translation);
 

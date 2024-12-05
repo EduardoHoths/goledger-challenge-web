@@ -13,20 +13,20 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { Trash2, AlertTriangle } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Artist, deleteAsset } from "@/service/api";
+import { Album, deleteAsset } from "@/service/api";
 import { handleApiError } from "@/service/handle-api-error";
 import { AxiosError } from "axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 
-const DeleteArtistModal = () => {
-  const translation = useTranslations("artists");
+const DeleteAlbumModal = () => {
+  const translation = useTranslations("albums");
   const errorTranslation = useTranslations("api-error");
   const { isOpen, onClose, type, data } = useModal();
-  const { asset } = data as { asset: Artist };
+  const { asset } = data as { asset: Album };
   const { toast } = useToast();
 
-  const isModalOpen = isOpen && type === "delete-artist";
+  const isModalOpen = isOpen && type === "delete-album";
 
   const queryClient = useQueryClient();
   const mutation = useMutation({
@@ -34,7 +34,7 @@ const DeleteArtistModal = () => {
 
     onSuccess: () => {
       onClose();
-      queryClient.invalidateQueries({ queryKey: ["artists"] });
+      queryClient.invalidateQueries({ queryKey: ["albums"] });
       toast({
         title: translation("modals.delete.success"),
         variant: "destructive",
@@ -61,9 +61,12 @@ const DeleteArtistModal = () => {
 
   const handleDelete = async () => {
     mutation.mutate({
-      type: "artist",
+      type: "album",
       asset: {
         name: asset.name,
+        artist: {
+          "@key": asset.artist["@key"]
+        },
       },
     });
   };
@@ -115,4 +118,4 @@ const DeleteArtistModal = () => {
   );
 };
 
-export default DeleteArtistModal;
+export default DeleteAlbumModal;

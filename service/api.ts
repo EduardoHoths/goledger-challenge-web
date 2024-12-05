@@ -18,23 +18,26 @@ export interface Artist {
 }
 
 export interface Album {
+  "@key": string;
   name: string;
   year: number;
-  artist: Artist;
+  artist: Partial<Artist>;
 }
 
 export interface Song {
+  "@key": string;
   name: string;
   album: Album;
 }
 
 export interface Playlist {
+  "@key": string;
   name: string;
   songs: Song[];
   private: boolean;
 }
 
-type AssetType = "artist" | "album" | "song" | "playlist";
+export type AssetType = "artist" | "album" | "song" | "playlist";
 
 interface AssetPayload {
   type: AssetType;
