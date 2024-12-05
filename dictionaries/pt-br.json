@@ -115,7 +115,53 @@
       "cancel": "Cancelar"
     }
   },
-  "sidebar": {
+  "songs": {
+    "title": "músicas",
+    "add-button": "Adicionar música",
+    "table": {
+      "input-search": "Buscar músicas...",
+      "table-header": {
+        "name": "nome",
+        "year": "ano",
+        "actions": "ações"
+      }
+    },
+    "modals": {
+      "create": {
+        "title": "Criar música",
+        "name": "Nome",
+        "name-placeholder": "Digite o nome da música",
+        "name-error": "Nome é obrigatório",
+        "album-name": "Nome do álbum",
+        "album-name-placeholder": "Digite o nome do álbum",
+        "album-name-error": "Nome do álbum é obrigatório",
+        "artist-name": "Nome do artista",
+        "artist-name-placeholder": "Digite o nome do artista",
+        "artist-name-error": "Nome do artista é obrigatório",
+        "submit": "Adicionar música",
+        "submiting": "Adicionando...",
+        "success": "Música criada com sucesso"
+      },
+      "edit": {
+        "title": "Editar música",
+        "name": "Nome",
+        "name-placeholder": "Digite o nome da música",
+        "name-error": "Nome é obrigatório",
+        "submit": "Editar música",
+        "submiting": "Editando...",
+        "success": "Música atualizada com sucesso"
+      },
+      "delete": {
+        "title": "Excluir Música",
+        "description": "Tem certeza que deseja excluir",
+        "warning": "Esta ação não pode ser desfeita.",
+        "submit": "Excluir música",
+        "submiting": "Excluindo...",
+        "success": "Música deletada com sucesso"
+      },
+      "cancel": "Cancelar"
+    }
+  },  "sidebar": {
     "home": "Início",
     "artists": "Artistas",
     "albums": "Álbuns",

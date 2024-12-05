@@ -63,11 +63,11 @@ const EditAlbumModal = () => {
   });
 
   useEffect(() => {
-    if (asset) {
+    if (type === "edit-album" && asset) {
       form.setValue("name", asset.name);
       form.setValue("year", asset.year.toString());
     }
-  }, [form, asset]);
+  }, [form, asset, type]);
 
   const handleClose = () => {
     form.reset();
@@ -112,7 +112,7 @@ const EditAlbumModal = () => {
         year: Number(values.year),
         artist: {
           "@key": asset.artist["@key"],
-        }
+        },
       },
     });
   };

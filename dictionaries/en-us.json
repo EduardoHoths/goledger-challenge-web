@@ -116,7 +116,55 @@
       },
       "cancel": "Cancel"
     }
-  },  "sidebar":{
+  },
+  "songs": {
+    "title": "songs",
+    "add-button": "Add song",
+    "table": {
+      "input-search": "Search songs...",
+      "table-header": {
+        "name": "name",
+        "year": "year",
+        "actions": "actions"
+      }
+    },
+    "modals": {
+      "create": {
+        "title": "Create song",
+        "name": "Name",
+        "name-placeholder": "Enter song name",
+        "name-error": "Name is required",
+        "album-name": "Album name",
+        "album-name-placeholder": "Enter album name",
+        "album-name-error": "Album name is required",
+        "artist-name": "Artist name",
+        "artist-name-placeholder": "Enter artist name",
+        "artist-name-error": "Artist name is required",
+        "submit": "Add song",
+        "submiting": "Adding...",
+        "success": "Song created successfully"
+      },
+      "edit": {
+        "title": "Edit song",
+        "name": "Name",
+        "name-placeholder": "Enter song name",
+        "name-error": "Name is required",
+        "submit": "Edit song",
+        "submiting": "Editing...",
+        "success": "Song updated successfully"
+      },
+      "delete": {
+        "title": "Delete Song",
+        "description": "Are you sure you want to delete",
+        "warning": "This action cannot be undone.",
+        "submit": "Delete song",
+        "submiting": "Deleting...",
+        "success": "Song deleted successfully"
+      },
+      "cancel": "Cancel"
+    }
+  },
+  "sidebar": {
     "home": "Home",
     "artists": "Artists",
     "albums": "Albums",

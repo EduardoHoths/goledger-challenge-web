@@ -27,7 +27,7 @@ export interface Album {
 export interface Song {
   "@key": string;
   name: string;
-  album: Album;
+  album: Partial<Album>;
 }
 
 export interface Playlist {

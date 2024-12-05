@@ -37,21 +37,21 @@ const formSchema = (translation: any) =>
     name: z.string().min(1, {
       message: translation("modals.create.name-error"),
     }),
-    year: z.string().min(1, {
-      message: translation("modals.create.year-error"),
+    album: z.string().min(1, {
+      message: translation("modals.create.album-name-error"),
     }),
     artist: z.string().min(1, {
       message: translation("modals.create.artist-name-error"),
     }),
   });
 
-const CreateAlbumModal = () => {
-  const translation = useTranslations("albums");
+const CreateSongModal = () => {
+  const translation = useTranslations("songs");
   const errorTranslation = useTranslations("api-error");
   const { isOpen, onClose, type } = useModal();
   const { toast } = useToast();
 
-  const isModalOpen = isOpen && type === "create-album";
+  const isModalOpen = isOpen && type === "create-song";
 
   const schema = formSchema(translation);
 
@@ -59,7 +59,7 @@ const CreateAlbumModal = () => {
     resolver: zodResolver(schema),
     defaultValues: {
       name: "",
-      year: "",
+      album: "",
       artist: "",
     },
   });
@@ -75,7 +75,7 @@ const CreateAlbumModal = () => {
 
     onSuccess: () => {
       handleClose();
-      queryClient.invalidateQueries({ queryKey: ["albums"] });
+      queryClient.invalidateQueries({ queryKey: ["songs"] });
       toast({
         title: translation("modals.create.success"),
         variant: "success",
@@ -102,13 +102,16 @@ const CreateAlbumModal = () => {
 
   const onSubmit = async (values: z.infer<typeof schema>) => {
     mutation.mutate({
-      type: "album",
+      type: "song",
       asset: {
         name: values.name,
-        year: Number(values.year),
-        artist: {
-          name: values.artist,
+        album: {
+          name: values.album,
+          artist: {
+            name: values.artist,
+          },
         },
+        
       },
     });
   };
@@ -149,20 +152,19 @@ const CreateAlbumModal = () => {
 
             <FormField
               control={form.control}
-              name="year"
+              name="album"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="dark:text-gray-300">
-                    {translation("modals.create.year")}
+                    {translation("modals.create.album-name")}
                   </FormLabel>
                   <FormControl>
                     <Input
                       placeholder={translation(
-                        "modals.create.year-placeholder"
+                        "modals.create.album-name-placeholder"
                       )}
                       {...field}
                       disabled={isLoading}
-                      type="number"
                       className="w-full dark:bg-[#2b2f3a] dark:border-[#3f4451] dark:text-white dark:placeholder-gray-400"
                     />
                   </FormControl>
@@ -220,4 +222,4 @@ const CreateAlbumModal = () => {
   );
 };
 
-export default CreateAlbumModal;
+export default CreateSongModal;

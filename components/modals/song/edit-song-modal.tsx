@@ -24,10 +24,11 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Mic2 } from "lucide-react";
-import { createAsset } from "@/service/api";
+import { Song, updateAsset } from "@/service/api";
 import { useToast } from "@/hooks/use-toast";
 import { AxiosError } from "axios";
 import { handleApiError } from "@/service/handle-api-error";
+import { useEffect } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 
@@ -37,21 +38,16 @@ const formSchema = (translation: any) =>
     name: z.string().min(1, {
       message: translation("modals.create.name-error"),
     }),
-    year: z.string().min(1, {
-      message: translation("modals.create.year-error"),
-    }),
-    artist: z.string().min(1, {
-      message: translation("modals.create.artist-name-error"),
-    }),
   });
 
-const CreateAlbumModal = () => {
-  const translation = useTranslations("albums");
+const EditSongModal = () => {
+  const translation = useTranslations("songs");
   const errorTranslation = useTranslations("api-error");
-  const { isOpen, onClose, type } = useModal();
+  const { isOpen, onClose, type, data } = useModal();
+  const { asset } = data as { asset: Required<Song> };
   const { toast } = useToast();
 
-  const isModalOpen = isOpen && type === "create-album";
+  const isModalOpen = isOpen && type === "edit-song";
 
   const schema = formSchema(translation);
 
@@ -59,10 +55,14 @@ const CreateAlbumModal = () => {
     resolver: zodResolver(schema),
     defaultValues: {
       name: "",
-      year: "",
-      artist: "",
     },
   });
+
+  useEffect(() => {
+    if (type === "edit-song" && asset) {
+      form.setValue("name", asset.name);
+    }
+  }, [form, asset, type]);
 
   const handleClose = () => {
     form.reset();
@@ -71,13 +71,12 @@ const CreateAlbumModal = () => {
 
   const queryClient = useQueryClient();
   const mutation = useMutation({
-    mutationFn: createAsset,
-
+    mutationFn: updateAsset,
     onSuccess: () => {
       handleClose();
       queryClient.invalidateQueries({ queryKey: ["albums"] });
       toast({
-        title: translation("modals.create.success"),
+        title: translation("modals.edit.success"),
         variant: "success",
       });
     },
@@ -102,12 +101,12 @@ const CreateAlbumModal = () => {
 
   const onSubmit = async (values: z.infer<typeof schema>) => {
     mutation.mutate({
-      type: "album",
+      type: "song",
       asset: {
+        "@key": asset["@key"],
         name: values.name,
-        year: Number(values.year),
-        artist: {
-          name: values.artist,
+        album: {
+          "@key": asset.album["@key"],
         },
       },
     });
@@ -119,7 +118,7 @@ const CreateAlbumModal = () => {
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-2xl dark:text-white">
             <Mic2 className="h-6 w-6" />
-            {translation("modals.create.title")}
+            {translation("modals.edit.title")}
           </DialogTitle>
         </DialogHeader>
         <Form {...form}>
@@ -130,61 +129,12 @@ const CreateAlbumModal = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="dark:text-gray-300">
-                    {translation("modals.create.name")}
+                    {translation("modals.edit.name")}
                   </FormLabel>
                   <FormControl>
                     <Input
-                      placeholder={translation(
-                        "modals.create.name-placeholder"
-                      )}
+                      placeholder={translation("modals.edit.name-placeholder")}
                       {...field}
-                      disabled={isLoading}
-                      className="w-full dark:bg-[#2b2f3a] dark:border-[#3f4451] dark:text-white dark:placeholder-gray-400"
-                    />
-                  </FormControl>
-                  <FormMessage className="text-red-400" />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="year"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="dark:text-gray-300">
-                    {translation("modals.create.year")}
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder={translation(
-                        "modals.create.year-placeholder"
-                      )}
-                      {...field}
-                      disabled={isLoading}
-                      type="number"
-                      className="w-full dark:bg-[#2b2f3a] dark:border-[#3f4451] dark:text-white dark:placeholder-gray-400"
-                    />
-                  </FormControl>
-                  <FormMessage className="text-red-400" />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="artist"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="dark:text-gray-300">
-                    {translation("modals.create.artist-name")}
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder={translation(
-                        "modals.create.artist-name-placeholder"
-                      )}
-                      {...field}
-                      disabled={isLoading}
                       className="w-full dark:bg-[#2b2f3a] dark:border-[#3f4451] dark:text-white dark:placeholder-gray-400"
                     />
                   </FormControl>
@@ -209,8 +159,8 @@ const CreateAlbumModal = () => {
                 className="dark:bg-[#4f46e5] dark:text-white dark:hover:bg-[#4338ca]"
               >
                 {isLoading
-                  ? translation("modals.create.submiting")
-                  : translation("modals.create.submit")}
+                  ? translation("modals.edit.submiting")
+                  : translation("modals.edit.submit")}
               </Button>
             </DialogFooter>
           </form>
@@ -220,4 +170,4 @@ const CreateAlbumModal = () => {
   );
 };
 
-export default CreateAlbumModal;
+export default EditSongModal;
