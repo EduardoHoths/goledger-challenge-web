@@ -7,6 +7,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+
 import { Input } from "@/components/ui/input";
 import { useModal } from "@/hooks/use-modal-store";
 
@@ -23,13 +24,21 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Mic2 } from "lucide-react";
-import { createAsset } from "@/service/api";
+import { ChevronsUpDown, Mic2 } from "lucide-react";
+import { Artist, createAsset, searchAsset } from "@/service/api";
 import { useToast } from "@/hooks/use-toast";
 import { AxiosError } from "axios";
 import { handleApiError } from "@/service/handle-api-error";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
+import { cn } from "@/lib/utils";
+
+import { ChangeEvent, useEffect, useState } from "react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const formSchema = (translation: any) =>
@@ -50,6 +59,38 @@ const CreateAlbumModal = () => {
   const errorTranslation = useTranslations("api-error");
   const { isOpen, onClose, type } = useModal();
   const { toast } = useToast();
+  const [filteredArtists, setFilteredArtists] = useState<Artist[]>([]);
+
+  const searchArtists = async (search?: string) => {
+    try {
+      const response = await searchAsset({
+        selector: {
+          "@assetType": "artist",
+          name: search
+            ? {
+                $regex: `(?i).*${search}.*`,
+              }
+            : undefined,
+        },
+        limit: 5,
+      });
+      const data = await response.data.result;
+
+      setFilteredArtists(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    searchArtists();
+  }, []);
+
+  const handleArtistSearch = async (event: ChangeEvent<HTMLInputElement>) => {
+    const search = event.target.value;
+
+    searchArtists(search);
+  };
 
   const isModalOpen = isOpen && type === "create-album";
 
@@ -107,7 +148,7 @@ const CreateAlbumModal = () => {
         name: values.name,
         year: Number(values.year),
         artist: {
-          name: values.artist,
+          "@key": filteredArtists[0]["@key"],
         },
       },
     });
@@ -178,16 +219,59 @@ const CreateAlbumModal = () => {
                   <FormLabel className="dark:text-gray-300">
                     {translation("modals.create.artist-name")}
                   </FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder={translation(
-                        "modals.create.artist-name-placeholder"
-                      )}
-                      {...field}
-                      disabled={isLoading}
-                      className="w-full dark:bg-[#2b2f3a] dark:border-[#3f4451] dark:text-white dark:placeholder-gray-400"
-                    />
-                  </FormControl>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant="outline"
+                          role="combobox"
+                          disabled={isLoading}
+                          className={cn(
+                            "w-full justify-between dark:bg-[#2b2f3a] dark:border-[#3f4451] dark:text-white dark:placeholder-gray-400",
+                            !field.value && "text-muted-foreground"
+                          )}
+                        >
+                          {field.value ||
+                            translation(
+                              "modals.create.artist-name-placeholder"
+                            )}
+                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                        </Button>
+                      </FormControl>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-96 p-4 dark:bg-[#23262e] dark:border-[#2b2f3a] rounded-lg shadow-lg">
+                      <div className="space-y-4">
+                        <Input
+                          placeholder={translation(
+                            "modals.create.artist-name-placeholder"
+                          )}
+                          onChange={handleArtistSearch}
+                          className="w-full p-3 text-base dark:bg-[#2b2f3a] dark:border-[#3f4451] dark:text-white dark:placeholder-gray-400 rounded-md"
+                        />
+
+                        {filteredArtists.length > 0 ? (
+                          <ul className="max-h-60 overflow-y-auto space-y-2 pr-2 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200 dark:scrollbar-thumb-[#4a4f5e] dark:scrollbar-track-[#2b2f3a] overscroll-contain">
+                            {filteredArtists.map((artist) => (
+                              <li
+                                key={artist["@key"]}
+                                onClick={() =>
+                                  form.setValue("artist", artist.name)
+                                }
+                                className="px-4 py-3 text-base cursor-pointer dark:bg-[#2b2f3a] dark:hover:bg-[#3f4451] rounded-md hover:bg-gray-100 transition"
+                              >
+                                {artist.name}
+                              </li>
+                            ))}
+                          </ul>
+                        ) : (
+                          <p className="text-base text-gray-600 dark:text-gray-400">
+                            {translation("modals.create.artist-name-not-found")}
+                          </p>
+                        )}
+                      </div>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+
                   <FormMessage className="text-red-400" />
                 </FormItem>
               )}

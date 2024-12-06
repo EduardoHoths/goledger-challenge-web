@@ -89,6 +89,7 @@
         "year-error": "Year is required",
         "artist-name": "Artist name",
         "artist-name-placeholder": "Enter artist name",
+        "artist-name-not-found": "Artist not found",
         "artist-name-error": "Artist name is required",
         "submit": "Add album",
         "submiting": "Adding...",
@@ -137,9 +138,11 @@
         "album-name": "Album name",
         "album-name-placeholder": "Enter album name",
         "album-name-error": "Album name is required",
+        "album-name-not-found": "Album not found",
         "artist-name": "Artist name",
         "artist-name-placeholder": "Enter artist name",
         "artist-name-error": "Artist name is required",
+        "artist-name-not-found": "Artist not found",
         "submit": "Add song",
         "submiting": "Adding...",
         "success": "Song created successfully"
@@ -164,6 +167,64 @@
       "cancel": "Cancel"
     }
   },
+  "playlists": {
+    "title": "playlists",
+    "add-button": "Add playlist",
+    "table": {
+      "input-search": "Search playlists...",
+      "table-header": {
+        "name": "name",
+        "private": "private",
+        "actions": "actions"
+      },
+      "private-true": "Private",
+      "private-false": "Public"
+    },
+    "modals": {
+      "create": {
+        "title": "Create playlist",
+        "name": "Name",
+        "name-placeholder": "Enter playlist name",
+        "name-error": "Name is required",
+        "private": "Private",
+        "add-songs": "Add songs",
+        "song-name": "Song name",
+        "song-name-placeholder": "Enter song name",
+        "song-name-error": "Song name is required",
+        "song-name-not-found": "Song not found",
+        "album-name": "Album name",
+        "album-name-placeholder": "Enter album name",
+        "album-name-error": "Album name is required",
+        "album-name-not-found": "Album not found",
+        "artist-name": "Artist name",
+        "artist-name-placeholder": "Enter artist name",
+        "artist-name-error": "Artist name is required",
+        "artist-name-not-found": "Artist not found",
+        "button-add-song": "Add song",
+        "submit": "Add playlist",
+        "submiting": "Adding...",
+        "success": "Playlist created successfully"
+      },
+      "edit": {
+        "title": "Edit playlist",
+        "name": "Name",
+        "name-placeholder": "Enter playlist name",
+        "name-error": "Name is required",
+        "submit": "Edit playlist",
+        "submiting": "Editing...",
+        "success": "Playlist updated successfully"
+      },
+      "delete": {
+        "title": "Delete Playlist",
+        "description": "Are you sure you want to delete",
+        "warning": "This action cannot be undone.",
+        "submit": "Delete playlist",
+        "submiting": "Deleting...",
+        "success": "Playlist deleted successfully"
+      },
+      "cancel": "Cancel"
+    }
+  },
   "sidebar": {
     "home": "Home",
     "artists": "Artists",
@@ -181,5 +242,9 @@
     "light": "Light",
     "dark": "Dark",
     "system": "System"
+  },
+  "language-selector": {
+    "english": "English",
+    "portuguese": "Portuguese"
   }
 }

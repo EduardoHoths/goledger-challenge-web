@@ -30,6 +30,9 @@ import { AxiosError } from "axios";
 import { handleApiError } from "@/service/handle-api-error";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
+import { useState } from "react";
+import { AddSongForm } from "./add-song-form";
+import { Switch } from "@/components/ui/switch";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const formSchema = (translation: any) =>
@@ -37,18 +40,33 @@ const formSchema = (translation: any) =>
     name: z.string().min(1, {
       message: translation("modals.create.name-error"),
     }),
-    country: z.string().min(1, {
-      message: translation("modals.create.country-error"),
-    }),
+    private: z.boolean(),
   });
 
-const CreateArtistModal = () => {
-  const translation = useTranslations("artists");
-  const errorTranslation = useTranslations("api-error")
+export interface SongFormFields {
+  song: {
+    name: string;
+    "@key": string;
+  };
+  album: {
+    name: string;
+    "@key": string;
+  };
+  artist: {
+    name: string;
+    "@key": string;
+  };
+}
+
+const CreatePlaylistModal = () => {
+  const [songs, setSongs] = useState<SongFormFields[]>([]);
+
+  const translation = useTranslations("playlists");
+  const errorTranslation = useTranslations("api-error");
   const { isOpen, onClose, type } = useModal();
   const { toast } = useToast();
 
-  const isModalOpen = isOpen && type === "create-artist";
+  const isModalOpen = isOpen && type === "create-playlist";
 
   const schema = formSchema(translation);
 
@@ -56,7 +74,7 @@ const CreateArtistModal = () => {
     resolver: zodResolver(schema),
     defaultValues: {
       name: "",
-      country: "",
+      private: false,
     },
   });
 
@@ -71,7 +89,7 @@ const CreateArtistModal = () => {
 
     onSuccess: () => {
       handleClose();
-      queryClient.invalidateQueries({ queryKey: ["artists"] });
+      queryClient.invalidateQueries({ queryKey: ["playlist"] });
       toast({
         title: translation("modals.create.success"),
         variant: "success",
@@ -97,13 +115,32 @@ const CreateArtistModal = () => {
   const isLoading = mutation.isPending;
 
   const onSubmit = async (values: z.infer<typeof schema>) => {
+    const songsFormatted = songs.map((song) => ({
+      name: song.song.name,
+      album: {
+        "@key": song.album["@key"],
+        artist: {
+          "@key": song.artist["@key"],
+        },
+      },
+    }));
+
     mutation.mutate({
-      type: "artist",
+      type: "playlist",
       asset: {
         name: values.name,
-        country: values.country,
+        private: values.private,
+        songs: songsFormatted,
       },
     });
+  };
+
+  const handleAddSong = (song: SongFormFields) => {
+    setSongs((prev) => [...prev, song]);
+  };
+
+  const handleRemoveSong = (index: number) => {
+    setSongs((prev) => prev.filter((_, i) => i !== index));
   };
 
   return (
@@ -142,25 +179,30 @@ const CreateArtistModal = () => {
 
             <FormField
               control={form.control}
-              name="country"
+              name="private"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="dark:text-gray-300 capitalize">
-                    {translation("modals.create.country")}
+                <FormItem className="flex items-center gap-2">
+                  <FormLabel className="dark:text-gray-300">
+                    {translation("modals.create.private")}
                   </FormLabel>
+
                   <FormControl>
-                    <Input
-                      placeholder={translation(
-                        "modals.create.country-placeholder"
-                      )}
-                      {...field}
-                      disabled={isLoading}
-                      className="w-full dark:bg-[#2b2f3a] dark:border-[#3f4451] dark:text-white dark:placeholder-gray-400"
+                    <Switch
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                      className="!m-0"
                     />
                   </FormControl>
+
                   <FormMessage className="text-red-400" />
                 </FormItem>
               )}
+            />
+
+            <AddSongForm
+              onAddSong={handleAddSong}
+              onRemoveSong={handleRemoveSong}
+              songs={songs}
             />
 
             <DialogFooter>
@@ -190,4 +232,4 @@ const CreateArtistModal = () => {
   );
 };
 
-export default CreateArtistModal;
+export default CreatePlaylistModal;

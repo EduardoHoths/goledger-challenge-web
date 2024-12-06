@@ -29,7 +29,14 @@ import { useQuery } from "@tanstack/react-query";
 async function getAssets(query: string = "", assetType: AssetType) {
   try {
     const response = await searchAsset({
-      selector: { "@assetType": assetType, name: query ? query : undefined },
+      selector: {
+        "@assetType": assetType,
+        name: query
+          ? {
+              "$regex": `(?i).*${query}.*`
+            }
+          : undefined,
+      },
     });
     const data = await response.data.result;
 
@@ -111,7 +118,9 @@ const AssetTable = ({
                 {"year" in item && <TableCell>{item.year}</TableCell>}
                 {"private" in item && (
                   <TableCell>
-                    {item.private ? translation("") : translation("")}
+                    {item.private
+                      ? translation("table.private-true")
+                      : translation("table.private-false")}
                   </TableCell>
                 )}
                 <TableCell>

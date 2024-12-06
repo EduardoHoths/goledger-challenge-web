@@ -24,12 +24,14 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Mic2 } from "lucide-react";
-import { createAsset } from "@/service/api";
+import { Playlist, updateAsset } from "@/service/api";
 import { useToast } from "@/hooks/use-toast";
 import { AxiosError } from "axios";
 import { handleApiError } from "@/service/handle-api-error";
+import { useEffect } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
+import { Switch } from "@/components/ui/switch";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const formSchema = (translation: any) =>
@@ -37,18 +39,17 @@ const formSchema = (translation: any) =>
     name: z.string().min(1, {
       message: translation("modals.create.name-error"),
     }),
-    country: z.string().min(1, {
-      message: translation("modals.create.country-error"),
-    }),
+    private: z.boolean(),
   });
 
-const CreateArtistModal = () => {
-  const translation = useTranslations("artists");
-  const errorTranslation = useTranslations("api-error")
-  const { isOpen, onClose, type } = useModal();
+const EditPlaylistModal = () => {
+  const translation = useTranslations("playlists");
+  const errorTranslation = useTranslations("api-error");
+  const { isOpen, onClose, type, data } = useModal();
+  const { asset } = data as { asset: Required<Playlist> };
   const { toast } = useToast();
 
-  const isModalOpen = isOpen && type === "create-artist";
+  const isModalOpen = isOpen && type === "edit-playlist";
 
   const schema = formSchema(translation);
 
@@ -56,9 +57,16 @@ const CreateArtistModal = () => {
     resolver: zodResolver(schema),
     defaultValues: {
       name: "",
-      country: "",
+      private: false,
     },
   });
+
+  useEffect(() => {
+    if (type === "edit-playlist" && asset) {
+      form.setValue("name", asset.name);
+      form.setValue("private", asset.private);
+    }
+  }, [form, asset, type]);
 
   const handleClose = () => {
     form.reset();
@@ -67,13 +75,12 @@ const CreateArtistModal = () => {
 
   const queryClient = useQueryClient();
   const mutation = useMutation({
-    mutationFn: createAsset,
-
+    mutationFn: updateAsset,
     onSuccess: () => {
       handleClose();
-      queryClient.invalidateQueries({ queryKey: ["artists"] });
+      queryClient.invalidateQueries({ queryKey: ["playlists"] });
       toast({
-        title: translation("modals.create.success"),
+        title: translation("modals.edit.success"),
         variant: "success",
       });
     },
@@ -98,10 +105,11 @@ const CreateArtistModal = () => {
 
   const onSubmit = async (values: z.infer<typeof schema>) => {
     mutation.mutate({
-      type: "artist",
+      type: "playlist",
       asset: {
+        "@key": asset["@key"],
         name: values.name,
-        country: values.country,
+        private: values.private,
       },
     });
   };
@@ -112,7 +120,7 @@ const CreateArtistModal = () => {
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-2xl dark:text-white">
             <Mic2 className="h-6 w-6" />
-            {translation("modals.create.title")}
+            {translation("modals.edit.title")}
           </DialogTitle>
         </DialogHeader>
         <Form {...form}>
@@ -123,15 +131,12 @@ const CreateArtistModal = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="dark:text-gray-300">
-                    {translation("modals.create.name")}
+                    {translation("modals.edit.name")}
                   </FormLabel>
                   <FormControl>
                     <Input
-                      placeholder={translation(
-                        "modals.create.name-placeholder"
-                      )}
+                      placeholder={translation("modals.edit.name-placeholder")}
                       {...field}
-                      disabled={isLoading}
                       className="w-full dark:bg-[#2b2f3a] dark:border-[#3f4451] dark:text-white dark:placeholder-gray-400"
                     />
                   </FormControl>
@@ -142,22 +147,21 @@ const CreateArtistModal = () => {
 
             <FormField
               control={form.control}
-              name="country"
+              name="private"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="dark:text-gray-300 capitalize">
-                    {translation("modals.create.country")}
+                <FormItem className="flex items-center gap-2">
+                  <FormLabel className="dark:text-gray-300">
+                    {translation("modals.create.private")}
                   </FormLabel>
+
                   <FormControl>
-                    <Input
-                      placeholder={translation(
-                        "modals.create.country-placeholder"
-                      )}
-                      {...field}
-                      disabled={isLoading}
-                      className="w-full dark:bg-[#2b2f3a] dark:border-[#3f4451] dark:text-white dark:placeholder-gray-400"
+                    <Switch
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                      className="!m-0"
                     />
                   </FormControl>
+
                   <FormMessage className="text-red-400" />
                 </FormItem>
               )}
@@ -179,8 +183,8 @@ const CreateArtistModal = () => {
                 className="dark:bg-[#4f46e5] dark:text-white dark:hover:bg-[#4338ca]"
               >
                 {isLoading
-                  ? translation("modals.create.submiting")
-                  : translation("modals.create.submit")}
+                  ? translation("modals.edit.submiting")
+                  : translation("modals.edit.submit")}
               </Button>
             </DialogFooter>
           </form>
@@ -190,4 +194,4 @@ const CreateArtistModal = () => {
   );
 };
 
-export default CreateArtistModal;
+export default EditPlaylistModal;

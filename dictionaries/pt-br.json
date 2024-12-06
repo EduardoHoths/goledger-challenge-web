@@ -1,33 +1,33 @@
 {
   "Home": {
-    "title": "Bem vindo ao BlockStream",
+    "title": "Bem-vindo ao BlockStream",
     "cards": {
       "artists": {
-        "title": "Total Artistas",
+        "title": "Total de Artistas",
         "description": "+20% desde o mês passado"
       },
       "albums": {
-        "title": "Total Álbuns",
+        "title": "Total de Álbuns",
         "description": "+15% desde o mês passado"
       },
       "songs": {
-        "title": "Total Músicas",
+        "title": "Total de Músicas",
         "description": "+25% desde o mês passado"
       },
       "playlists": {
-        "title": "Total Playlists",
+        "title": "Total de Playlists",
         "description": "+10% desde o mês passado"
       }
     }
   },
   "artists": {
-    "title": "artistas",
+    "title": "Artistas",
     "add-button": "Adicionar artista",
     "table": {
       "input-search": "Buscar artistas...",
       "table-header": {
-        "name": "nome",
-        "actions": "ações"
+        "name": "Nome",
+        "actions": "Ações"
       }
     },
     "modals": {
@@ -41,7 +41,8 @@
         "country-error": "País é obrigatório",
         "submit": "Adicionar artista",
         "submiting": "Adicionando...",
-        "success": "Artista criado com sucesso"
+        "success": "Artista criado com sucesso",
+        "error": "Erro ao criar artista"
       },
       "edit": {
         "title": "Editar artista",
@@ -61,20 +62,20 @@
         "warning": "Esta ação não pode ser desfeita.",
         "submit": "Excluir artista",
         "submiting": "Excluindo...",
-        "success": "Artista deletado com sucesso"
+        "success": "Artista excluído com sucesso"
       },
       "cancel": "Cancelar"
     }
   },
   "albums": {
-    "title": "álbuns",
+    "title": "Álbuns",
     "add-button": "Adicionar álbum",
     "table": {
       "input-search": "Buscar álbuns...",
       "table-header": {
-        "name": "nome",
-        "year": "ano",
-        "actions": "ações"
+        "name": "Nome",
+        "year": "Ano",
+        "actions": "Ações"
       }
     },
     "modals": {
@@ -88,11 +89,13 @@
         "year-error": "Ano é obrigatório",
         "artist-name": "Nome do artista",
         "artist-name-placeholder": "Digite o nome do artista",
+        "artist-name-not-found": "Artista não encontrado",
         "artist-name-error": "Nome do artista é obrigatório",
         "submit": "Adicionar álbum",
         "submiting": "Adicionando...",
         "success": "Álbum criado com sucesso"
-      },      "edit": {
+      },
+      "edit": {
         "title": "Editar álbum",
         "name": "Nome",
         "name-placeholder": "Digite o nome do álbum",
@@ -110,20 +113,20 @@
         "warning": "Esta ação não pode ser desfeita.",
         "submit": "Excluir álbum",
         "submiting": "Excluindo...",
-        "success": "Álbum deletado com sucesso"
+        "success": "Álbum excluído com sucesso"
       },
       "cancel": "Cancelar"
     }
   },
   "songs": {
-    "title": "músicas",
+    "title": "Músicas",
     "add-button": "Adicionar música",
     "table": {
       "input-search": "Buscar músicas...",
       "table-header": {
-        "name": "nome",
-        "year": "ano",
-        "actions": "ações"
+        "name": "Nome",
+        "year": "Ano",
+        "actions": "Ações"
       }
     },
     "modals": {
@@ -135,9 +138,11 @@
         "album-name": "Nome do álbum",
         "album-name-placeholder": "Digite o nome do álbum",
         "album-name-error": "Nome do álbum é obrigatório",
+        "album-name-not-found": "Álbum não encontrado",
         "artist-name": "Nome do artista",
         "artist-name-placeholder": "Digite o nome do artista",
         "artist-name-error": "Nome do artista é obrigatório",
+        "artist-name-not-found": "Artista não encontrado",
         "submit": "Adicionar música",
         "submiting": "Adicionando...",
         "success": "Música criada com sucesso"
@@ -157,11 +162,70 @@
         "warning": "Esta ação não pode ser desfeita.",
         "submit": "Excluir música",
         "submiting": "Excluindo...",
-        "success": "Música deletada com sucesso"
+        "success": "Música excluída com sucesso"
       },
       "cancel": "Cancelar"
     }
-  },  "sidebar": {
+  },
+  "playlists": {
+    "title": "Playlists",
+    "add-button": "Adicionar playlist",
+    "table": {
+      "input-search": "Buscar playlists...",
+      "table-header": {
+        "name": "Nome",
+        "private": "Privado",
+        "actions": "Ações"
+      },
+      "private-true": "Privada",
+      "private-false": "Pública"
+    },
+    "modals": {
+      "create": {
+        "title": "Criar playlist",
+        "name": "Nome",
+        "name-placeholder": "Digite o nome da playlist",
+        "name-error": "Nome é obrigatório",
+        "private": "Privada",
+        "add-songs": "Adicionar músicas",
+        "song-name": "Nome da música",
+        "song-name-placeholder": "Digite o nome da música",
+        "song-name-error": "Nome da música é obrigatório",
+        "song-name-not-found": "Música não encontrada",
+        "album-name": "Nome do álbum",
+        "album-name-placeholder": "Digite o nome do álbum",
+        "album-name-error": "Nome do álbum é obrigatório",
+        "album-name-not-found": "Álbum não encontrado",
+        "artist-name": "Nome do artista",
+        "artist-name-placeholder": "Digite o nome do artista",
+        "artist-name-error": "Nome do artista é obrigatório",
+        "artist-name-not-found": "Artista não encontrado",
+        "button-add-song": "Adicionar música",
+        "submit": "Adicionar playlist",
+        "submiting": "Adicionando...",
+        "success": "Playlist criada com sucesso"
+      },
+      "edit": {
+        "title": "Editar playlist",
+        "name": "Nome",
+        "name-placeholder": "Digite o nome da playlist",
+        "name-error": "Nome é obrigatório",
+        "submit": "Editar playlist",
+        "submiting": "Editando...",
+        "success": "Playlist atualizada com sucesso"
+      },
+      "delete": {
+        "title": "Excluir Playlist",
+        "description": "Tem certeza que deseja excluir",
+        "warning": "Esta ação não pode ser desfeita.",
+        "submit": "Excluir playlist",
+        "submiting": "Excluindo...",
+        "success": "Playlist excluída com sucesso"
+      },
+      "cancel": "Cancelar"
+    }
+  },
+  "sidebar": {
     "home": "Início",
     "artists": "Artistas",
     "albums": "Álbuns",
@@ -178,5 +242,9 @@
     "light": "Claro",
     "dark": "Escuro",
     "system": "Sistema"
+  },
+  "language-selector": {
+    "english": "Inglês",
+    "portuguese": "Português"
   }
 }

@@ -10,6 +10,9 @@ import EditAlbumModal from "../modals/album/edit-album-modal";
 import CreateSongModal from "../modals/song/create-song-modal";
 import DeleteSongModal from "../modals/song/delete-song-modal";
 import EditSongModal from "../modals/song/edit-song-modal";
+import CreatePlaylistModal from "../modals/playlist/create-playlist-modal";
+import EditPlaylistModal from "../modals/playlist/edit-playlist-modal";
+import DeletePlaylistModal from "../modals/playlist/delete-playlist-modal";
 
 export const ModalProvider = () => {
   const [isMounted, setIsMounted] = useState(false);
@@ -35,6 +38,10 @@ export const ModalProvider = () => {
       <CreateSongModal />
       <DeleteSongModal />
       <EditSongModal />
+
+      <CreatePlaylistModal />
+      <DeletePlaylistModal />
+      <EditPlaylistModal />
     </>
   );
 };

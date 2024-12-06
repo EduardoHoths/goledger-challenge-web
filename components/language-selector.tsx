@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 
@@ -7,6 +8,8 @@ const LanguageSelector = () => {
   const router = useRouter();
   const pathname = usePathname();
   const [selectedLanguage, setSelectedLanguage] = useState("en-us");
+
+  const translation = useTranslations("language-selector");
 
   useEffect(() => {
     const currentLocale = pathname.split("/")[1];
@@ -28,8 +31,8 @@ const LanguageSelector = () => {
       onChange={handleLanguageChange}
       className="border rounded-md p-2 bg-background dark:text-white dark:border-gray-700 text-sm"
     >
-      <option value="en-us">&#127482;&#127480; English</option>
-      <option value="pt-br">&#127463;&#127479; Português</option>
+      <option value="en-us">&#127482;&#127480; {translation("english")}</option>
+      <option value="pt-br">&#127463;&#127479; {translation("portuguese")}</option>
     </select>
   );
 };

@@ -18,22 +18,22 @@ export interface Artist {
 }
 
 export interface Album {
-  "@key": string;
+  "@key"?: string;
   name: string;
   year: number;
   artist: Partial<Artist>;
 }
 
 export interface Song {
-  "@key": string;
+  "@key"?: string;
   name: string;
   album: Partial<Album>;
 }
 
 export interface Playlist {
-  "@key": string;
+  "@key"?: string;
   name: string;
-  songs: Song[];
+  songs: Partial<Song[]>;
   private: boolean;
 }
 
@@ -48,16 +48,21 @@ interface AssetPayload {
 interface SearchAssetProps {
   selector: {
     "@assetType": AssetType;
-    name?: string;
+    name?: {
+      $regex?: string;
+    };
+    "@key"?: string;
   };
+  limit?: number;
 }
 
-export function searchAsset({ selector }: SearchAssetProps) {
+export function searchAsset({ selector, limit }: SearchAssetProps) {
   const payload = {
     query: {
       selector: {
         ...selector,
       },
+      limit,
     },
   };
 
@@ -93,6 +98,7 @@ export function deleteAsset({ type, asset }: AssetPayload) {
       "@assetType": type,
       ...asset,
     },
+    cascade: true,
   };
 
   return api.put("/invoke/deleteAsset", payload);
